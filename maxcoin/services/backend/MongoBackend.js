@@ -21,7 +21,12 @@ class MongoBackend {
     return this.client;
   }
 
-  async disconnect() {}
+  async disconnect() {
+    if (this.client) {
+      return this.client.close();
+    } 
+    return false;
+  }
 
   async insert() {}
 
@@ -37,6 +42,11 @@ class MongoBackend {
       throw new Error("Connecting to MongoDB failed");
     }
     console.timeEnd("mongodb-connect");
+
+    console.info("Disconnecting from MongoDB");
+    console.time("mongodb-disconnect");
+    await this.disconnect();
+    console.timeEnd("mongodb-disconnect");
   }
 }
 
